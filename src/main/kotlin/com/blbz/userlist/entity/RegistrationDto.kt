@@ -6,6 +6,13 @@ import javax.validation.constraints.NotEmpty
 
 @Data
 class RegistrationDto {
+    fun getEmail(): Any {
+        return email
+    }
+
+    fun getPassword(): CharSequence? {
+        return password
+    }
 
     @get: NotBlank
     var name:String = ""
