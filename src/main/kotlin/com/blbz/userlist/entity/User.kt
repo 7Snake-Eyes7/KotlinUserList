@@ -9,22 +9,27 @@ import javax.persistence.GenerationType
 
 @Entity
 @Data
-class User {
+open class User {
+	open fun setPassword(epassword: String?): String {
+		return password
+	}
+
+	open fun setVerified(b: Boolean): Boolean {
+		return true
+	}
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	val id:Long = 0
+	open var id:Long = 0
 
-	val name:String = ""
+	open var name:String = ""
 
-	val email:String = ""
+	open var email:String = ""
 
-	val mobileNumber:Long = 0
+	open var mobileNumber:Long = 0
 
-	val password:String = ""
+	open var isVerified:Boolean = false
 
-	lateinit var createdTime: LocalDateTime
-
-	lateinit var updateTime: LocalDateTime
+	open var password:String = ""
 
 }
