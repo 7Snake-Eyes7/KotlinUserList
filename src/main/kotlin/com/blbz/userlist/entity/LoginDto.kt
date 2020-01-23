@@ -1,14 +1,12 @@
 package com.blbz.userlist.entity
 
-import lombok.Data
 import javax.validation.constraints.NotBlank
 
-@Data
-class LoginDto {
+data class LoginDto (
 
     @get: NotBlank
-    val email:String =""
+    val email:String ="",
 
     @get: NotBlank
     val password:String=""
-}
+)
