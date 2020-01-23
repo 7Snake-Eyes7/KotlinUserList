@@ -14,7 +14,7 @@ import javax.transaction.Transactional as Transactional1
 
 
 @Service
-abstract class UserServiceImplementation : IUserService {
+class UserServiceImplementation : IUserService {
 
     private val user = User()
     @Autowired
@@ -26,13 +26,12 @@ abstract class UserServiceImplementation : IUserService {
 
     @Transactional1
     override fun register(info: RegistrationDto): User {
-        var user: User = repository!!.getUser(info.getEmail() as String)
+        var user: User = repository!!.findByEmail(info.getEmail() as String)
         return if (user == null) {
             var userObj = User()
             BeanUtils.copyProperties(info, userObj)
             val epassword = encryption!!.encode(info.getPassword())
             userObj.setPassword(epassword)
-            userObj.setVerified(false)
             userObj = repository.save(user)
             return userObj
         } else {
