@@ -2,14 +2,14 @@ package com.blbz.userlist.entity
 
 import javax.validation.constraints.NotBlank
 
-class PasswordUpdateDto {
+class PasswordUpdateDto (
 
     @get: NotBlank
-    val email:String = ""
+    val email:String = "",
 
     @get: NotBlank
-    val password:String = ""
+    val password:String = "",
 
     @get: NotBlank
     val confirmPassword:String =""
-}
+)
