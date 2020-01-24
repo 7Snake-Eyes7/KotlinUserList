@@ -31,4 +31,5 @@ class UserController {
                     .body<Response>(Response("user already exist", 400, information))
         }
     }
+
 }
