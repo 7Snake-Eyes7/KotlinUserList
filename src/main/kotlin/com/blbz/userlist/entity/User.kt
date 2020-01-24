@@ -10,15 +10,15 @@ data class User (
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	open var id:Long = 0,
+	open val id:Long = 0,
 
-	open var name:String = "",
+	open val name:String = "",
 
-	open var email:String = "",
+	open val email:String = "",
 
-	open var mobileNumber:Long = 0,
+	open val mobileNumber:Long = 0,
 
-	open var password:String = ""
+	open val password:String = ""
 
 ) {
 	fun setPassword(epassword: String?): String? {
