@@ -1,10 +1,11 @@
 package com.blbz.userlist.response
 
 import lombok.Data
+import lombok.Getter
 
 
 @Data
-class Response {
+open class Response {
     private var message: String
     private var statusCode: Int
     private var obj: Any? = null

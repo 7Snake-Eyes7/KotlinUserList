@@ -1,4 +1,4 @@
-package com.bridgelabz.fundoo_notes.responses
+package com.blbz.userlist.response
 
 import lombok.Data
 import org.springframework.stereotype.Component
