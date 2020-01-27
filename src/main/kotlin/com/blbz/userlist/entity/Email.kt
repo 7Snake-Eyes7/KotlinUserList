@@ -1,4 +1,4 @@
-package com.bridgelabz.fundoo_notes.Entity
+package com.blbz.userlist.entity
 
 import lombok.Data
 
