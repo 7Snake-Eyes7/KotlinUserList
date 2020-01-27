@@ -1,9 +1,6 @@
-package com.bridgelabz.fundoo_notes.exception
+package com.blbz.userlist.exception
 
-import lombok.Getter
-
-@Getter
-class UserException(override val message: String?) : RuntimeException(message) {
+data class UserException(override val message: String?) : RuntimeException(message) {
 
     companion object {
         /**
