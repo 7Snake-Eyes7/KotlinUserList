@@ -1,20 +1,19 @@
-package com.bridgelabz.fundoo_notes.services
+package com.blbz.userlist.service
 
-import com.bridgelabz.fundoo_notes.Entity.LoginInformation
-import com.bridgelabz.fundoo_notes.Entity.UserDto
-import com.bridgelabz.fundoo_notes.Entity.UserInformation
-import com.bridgelabz.fundoo_notes.configurations.RabbitMQSender
-import com.bridgelabz.fundoo_notes.exception.UserException
-import com.bridgelabz.fundoo_notes.reddisrepository.RedisRepository
-import com.bridgelabz.fundoo_notes.repository.IUserRepository
-import com.bridgelabz.fundoo_notes.responses.MailObject
-import com.bridgelabz.fundoo_notes.responses.MailResponse
-import com.bridgelabz.fundoo_notes.util.JwtGenerator
-import com.bridgelabz.fundoo_notes.util.MailServiceProvider
-import org.modelmapper.ModelMapper
+import com.blbz.userlist.entity.LoginInformation
+import com.blbz.userlist.entity.UserDto
+import com.blbz.userlist.entity.UserInformation
+import com.blbz.userlist.exception.UserException
+import com.blbz.userlist.repository.IUserRepository
+import com.blbz.userlist.response.MailObject
+import com.blbz.userlist.response.MailResponse
+import com.blbz.userlist.util.JwtGenerator
+import com.blbz.userlist.util.MailServiceProvider
+import org.springframework.beans.BeanUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Service
+import springfox.documentation.swagger2.mappers.ModelMapper
 import java.time.LocalDateTime
 import javax.transaction.Transactional
 
@@ -34,32 +33,30 @@ class ServiceImplementation : Services {
     @Autowired
     private val modelMapper: ModelMapper? = null
     @Autowired
-    private val rabbitMQSender: RabbitMQSender? = null
-    @Autowired
-    private val reddisRepository: RedisRepository? = null
+    private val mail: MailServiceProvider? = null
+
 
     @Transactional
     override fun register(information: UserDto?): Boolean {
         println("inside service")
         val user: UserInformation? = repository!!.getUser(information!!.getEmail())
         return if (user == null) {
-            userInformation = modelMapper!!.map<UserInformation?>(information, UserInformation::class.java)
-            //			BeanUtils.copyProperties(information, UserInformation.class);
+            var user: UserInformation = UserInformation()
+            BeanUtils.copyProperties(information, user)
             userInformation!!.setCreatedDate(LocalDateTime.now())
             val epassword = encryption!!.encode(information.getPassword())
             userInformation!!.setPassword(epassword)
             userInformation!!.setVerified(false)
             userInformation = repository!!.save(userInformation)
-            //			reddisRepository.save(userInformation);
             println("id" + " " + userInformation!!.getUserId())
             println("token" + " " + generate!!.jwtToken(userInformation!!.getUserId() as Long))
-            val mailResponse: String? = response!!.formMessage("http://localhost:3000/verify",
+            val mailResponse: String? = response!!.formMessage("http://localhost:9020/user/verify",
                     generate.jwtToken(userInformation!!.getUserId() as Long))
             println(mailResponse)
             mailObject!!.setEmail(information.getEmail())
             mailObject!!.setMessage(mailResponse)
             mailObject!!.setSubject("verification")
-            rabbitMQSender!!.send(mailObject)
+            mail!!.sendEmail(mailObject)
             true
         } else {
             throw UserException("user already exist with the same mail id")
@@ -75,7 +72,7 @@ class ServiceImplementation : Services {
                 println(generate!!.jwtToken(user.getUserId() as Long))
                 user
             } else {
-                val mailResponse: String? = response!!.formMessage("http://localhost:3000/verify",
+                val mailResponse: String? = response!!.formMessage("http://localhost:9020/user/verify",
                         generate!!.jwtToken(user.getUserId() as Long))
                 MailServiceProvider.Companion.sendEmail(information.getUsername(), "verification", mailResponse)
                 null
@@ -110,7 +107,7 @@ class ServiceImplementation : Services {
     @Transactional
     @Throws(Exception::class)
     override fun verify(token: String?): Boolean {
-        println("id in verification" + generate!!.parseJWT(token) as Long)
+        println("id in verification" + token?.let { generate!!.parseJWT(it) } as Long)
         val id = generate!!.parseJWT(token) as Long
         repository!!.verify(id)
         return true
@@ -120,7 +117,7 @@ class ServiceImplementation : Services {
 //        return try {
 //            val user: UserInformation? = repository!!.getUser(email)
 //            if (user!!.isVerified) {
-//                val mailResponse: String? = response!!.formMessage("http://localhost:3000/updatePassword",
+//                val mailResponse: String? = response!!.formMessage("http://localhost:9020/user/updatePassword",
 //                        generate!!.jwtToken(user.getUserId()))
 //                MailServiceProvider.Companion.sendEmail(user.getEmail(), "verification", mailResponse)
 //                true

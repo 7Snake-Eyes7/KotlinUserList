@@ -1,8 +1,8 @@
-package com.bridgelabz.fundoo_notes.services
+package com.blbz.userlist.service
 
-import com.bridgelabz.fundoo_notes.Entity.LoginInformation
-import com.bridgelabz.fundoo_notes.Entity.UserDto
-import com.bridgelabz.fundoo_notes.Entity.UserInformation
+import com.blbz.userlist.entity.LoginInformation
+import com.blbz.userlist.entity.UserDto
+import com.blbz.userlist.entity.UserInformation
 
 
 interface Services {
