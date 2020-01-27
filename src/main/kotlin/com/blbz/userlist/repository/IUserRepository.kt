@@ -1,6 +1,6 @@
-package com.bridgelabz.fundoo_notes.repository
+package com.blbz.userlist.repository
 
-import com.bridgelabz.fundoo_notes.Entity.UserInformation
+import com.blbz.userlist.entity.UserInformation
 
 interface IUserRepository {
     open fun save(userInformation: UserInformation?): UserInformation?

@@ -1,6 +1,6 @@
-package com.bridgelabz.fundoo_notes.repository
+package com.blbz.userlist.repository
 
-import com.bridgelabz.fundoo_notes.Entity.UserInformation
+import com.blbz.userlist.entity.UserInformation
 import org.hibernate.Session
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Repository
@@ -50,11 +50,7 @@ class UserRepositoryImplementation : IUserRepository {
         q.setParameter("p", true)
         q.setParameter("i", id)
         val status = q.executeUpdate()
-        return if (status > 0) {
-            true
-        } else {
-            false
-        }
+        return status > 0
     }
 
     override fun getUsers(): MutableList<UserInformation?>? {
